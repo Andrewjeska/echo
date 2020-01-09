@@ -5,10 +5,17 @@ import (
 	"time"
 
 	"github.com/blend/go-sdk/logger"
+	"github.com/blend/go-sdk/web"
 )
 
 func main() {
 	log := logger.All(logger.OptPath("echo"))
+
+	app := web.New(web.OptConfigFromEnv(), web.OptLog(log))
+	app.GET("/", func(r *web.Ctx) web.Result {
+		return web.Text.Result("echo")
+	})
+
 	ticker := time.NewTicker(3000 * time.Millisecond)
 	for {
 		select {
