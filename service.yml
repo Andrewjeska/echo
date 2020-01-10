@@ -1,14 +1,19 @@
 accessibility: public
 containerPort: 5000
 
+eadinessProbe:
+  httpGet:
+    path: /
+    port: 5000
+  initialDelaySeconds: 30
+  periodSeconds: 30
+
 livenessProbe:
   httpGet:
     path: /
     port: 5000
-  periodSeconds: 5
+  periodSeconds: 30
 
 env:
   - name: INT_CERT_CA
     value: "/var/tls-certs/internal-cert-root-ca/tls.crt"
-  - name: DEMO_FAREWELL
-    value: "Such a sweet sorrow"
