@@ -42,9 +42,8 @@ func main() {
 		select {
 		case <-ticker.C:
 			{
-
 				inStart := time.Now().UnixNano()
-				_, err := client.Get("https://echo.blend.cluster.service.local/status")
+				_, err := client.Get("https://echo.blend.svc.cluster.local/status")
 				if err != nil {
 					log.Fatal(err)
 				}
