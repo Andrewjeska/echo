@@ -56,7 +56,7 @@ func main() {
 				}
 				outEnd := time.Now().UnixNano()
 
-				log.Infof("\nhttps://echo.test.k8s.centrio.com/status: %d ms \nhttps://echo.blend.svc.cluster.local/status: %d ms\n", (outEnd-outStart)/1000, (inEnd-inStart)/1000)
+				log.Infof("\nhttps://echo.test.k8s.centrio.com/status: %d ms \nhttps://echo.blend.svc.cluster.local/status: %d ms\n", (outEnd-outStart)/1000000, (inEnd-inStart)/1000000)
 
 			}
 		}
