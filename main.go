@@ -42,21 +42,21 @@ func main() {
 		select {
 		case <-ticker.C:
 			{
-				inStart := time.Now().UnixNano()
+				internalStart := time.Now()
 				_, err := client.Get("https://echo.blend.svc.cluster.local/status")
 				if err != nil {
 					log.Fatal(err)
 				}
-				inEnd := time.Now().UnixNano()
+				internalTime := time.Since(internalStart)
 
-				outStart := time.Now().UnixNano()
+				extStart := time.Now()
 				_, err = http.Get("https://echo.test.k8s.centrio.com/status")
 				if err != nil {
 					log.Fatal(err)
 				}
-				outEnd := time.Now().UnixNano()
+				externalTime := time.Since(extStart)
 
-				log.Infof("\nhttps://echo.test.k8s.centrio.com/status: %d ms \nhttps://echo.blend.svc.cluster.local/status: %d ms\n", (outEnd-outStart)/1000000, (inEnd-inStart)/1000000)
+				log.Infof("\nhttps://echo.test.k8s.centrio.com/status: %s \nhttps://echo.blend.svc.cluster.local/status: %s\n", externalTime.String(), internalTime.String())
 
 			}
 		}
