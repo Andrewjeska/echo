@@ -23,8 +23,15 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	extCACert, err := ioutil.ReadFile("/var/run/secrets/kubernetes.io/serviceaccount/ca.crt")
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	caCertPool := x509.NewCertPool()
 	caCertPool.AppendCertsFromPEM(caCert)
+	caCertPool.AppendCertsFromPEM(extCACert)
 
 	// Create a HTTPS client and supply the created CA pool and certificate
 	client := &http.Client{
