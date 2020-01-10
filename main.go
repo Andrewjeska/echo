@@ -1,6 +1,9 @@
 package main
 
 import (
+	"crypto/tls"
+	"crypto/x509"
+	"io/ioutil"
 	"net/http"
 	"time"
 
@@ -16,6 +19,22 @@ func main() {
 		return web.Text.Result("echo")
 	})
 
+	caCert, err := ioutil.ReadFile("/var/tls-certs/internal-cert-root-ca/tls.crt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	caCertPool := x509.NewCertPool()
+	caCertPool.AppendCertsFromPEM(caCert)
+
+	// Create a HTTPS client and supply the created CA pool and certificate
+	client := &http.Client{
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{
+				RootCAs: caCertPool,
+			},
+		},
+	}
+
 	ticker := time.NewTicker(3000 * time.Millisecond)
 	for {
 		select {
@@ -23,14 +42,14 @@ func main() {
 			{
 
 				inStart := time.Now().UnixNano()
-				_, err := http.Get("https://echo.blend/status")
+				_, err := client.Get("https://echo.blend/status")
 				if err != nil {
 					log.Fatal(err)
 				}
 				inEnd := time.Now().UnixNano()
 
 				outStart := time.Now().UnixNano()
-				_, err = http.Get("https://echo.test.k8s.centrio.com/status")
+				_, err = client.Get("https://echo.test.k8s.centrio.com/status")
 				if err != nil {
 					log.Fatal(err)
 				}
