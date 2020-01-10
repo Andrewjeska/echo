@@ -44,7 +44,7 @@ func main() {
 			{
 
 				inStart := time.Now().UnixNano()
-				_, err := client.Get("https://echo.blend/status")
+				_, err := client.Get("https://echo.blend.cluster.service.local/status")
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -57,7 +57,7 @@ func main() {
 				}
 				outEnd := time.Now().UnixNano()
 
-				log.Infof("\nhttps://echo.test.k8s.centrio.com/status: %d ms \nhttps://echo.blend/status: %d ms\n", (outEnd-outStart)/1000, (inEnd-inStart)/1000)
+				log.Infof("\nhttps://echo.test.k8s.centrio.com/status: %d ms \nhttps://echo.blend.cluster.service.local/status: %d ms\n", (outEnd-outStart)/1000, (inEnd-inStart)/1000)
 
 			}
 		}
