@@ -6,3 +6,9 @@ livenessProbe:
     path: /
     port: 5000
   periodSeconds: 5
+
+env:
+  - name: INT_CERT_CA
+    value: "/var/tls-certs/internal-cert-root-ca/tls.crt"
+  - name: DEMO_FAREWELL
+    value: "Such a sweet sorrow"

@@ -5,6 +5,7 @@ import (
 	"crypto/x509"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/blend/go-sdk/logger"
@@ -19,19 +20,13 @@ func main() {
 		return web.Text.Result("echo")
 	})
 
-	caCert, err := ioutil.ReadFile("/var/tls-certs/internal-cert-root-ca/tls.crt")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	extCACert, err := ioutil.ReadFile("/var/run/secrets/kubernetes.io/serviceaccount/ca.crt")
+	caCert, err := ioutil.ReadFile(os.Getenv("INT_CERT_CA"))
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	caCertPool := x509.NewCertPool()
 	caCertPool.AppendCertsFromPEM(caCert)
-	caCertPool.AppendCertsFromPEM(extCACert)
 
 	// Create a HTTPS client and supply the created CA pool and certificate
 	client := &http.Client{
@@ -56,7 +51,7 @@ func main() {
 				inEnd := time.Now().UnixNano()
 
 				outStart := time.Now().UnixNano()
-				_, err = client.Get("https://echo.test.k8s.centrio.com/status")
+				_, err = http.Get("https://echo.test.k8s.centrio.com/status")
 				if err != nil {
 					log.Fatal(err)
 				}
