@@ -13,7 +13,4 @@ livenessProbe:
     path: /
     port: 5000
   periodSeconds: 30
-
-env:
-  - name: INT_CERT_CA
-    value: "/var/tls-certs/internal-cert-root-ca/tls.crt"
+  
